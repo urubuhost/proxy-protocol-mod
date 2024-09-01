@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "haproxy_protocol",
+	"version": "${version}",
+	"name": "HAProxy Protocol",
+	"description": "Adds HAProxy protocol support for modded servers.",
+	"authors": [
+		"NickUC"
+	],
+	"contact": {
+		"homepage": "https://urubu.host",
+		"sources": "https://github.com/urubuhost/haproxy-protocol-mod"
+	},
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"app.urubu.haproxy.HAProxyProtocolMod"
+		]
+	},
+	"mixins": [
+		"haproxy_protocol.mixins.json"
+	]
+}

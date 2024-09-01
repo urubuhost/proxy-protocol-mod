@@ -1,0 +1,104 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+        maven {
+            name = 'sponge'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+    }
+    dependencies {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+            changing = true
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply plugin: 'forge'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = '1.0'
+group = 'app.urubu.haproxy'
+archivesBaseName = 'haproxy_protocol'
+
+minecraft {
+    version = project.minecraft_version + "-" + project.forge_version
+    runDir = "run"
+}
+
+def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + "${archivesBaseName}.refmap.json"
+def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${mixinSrg}", "-AoutRefMapFile=${refMap}"]
+}
+
+reobf {
+    addExtraSrgFile mixinSrg
+}
+
+repositories {
+    jcenter()
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    compileOnly 'io.netty:netty-codec-haproxy:4.0.29.Final'
+    shade 'io.netty:netty-codec-haproxy:4.0.29.Final'
+    shade 'io.netty:netty-codec:4.0.29.Final'
+    shade 'io.netty:netty-common:4.0.29.Final'
+
+    compileOnly 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+    from sourceSets.main.output
+
+    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
+        from (zipTree(artifact))
+    }
+    from refMap
+    manifest.attributes(
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'MixinConfigs': "${archivesBaseName}.mixins.json",
+            'FMLCorePluginContainsFMLMod': 'true',
+            "MixinCompatibilityLevel": "JAVA_8"
+    )
+}
+
+reobf {
+    addExtraSrgFile mixinSrg
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    filesMatching('mcmod.info') {
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

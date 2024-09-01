@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+[[mods]]
+modId="haproxy_protocol"
+version="${file.jarVersion}"
+displayName="HAProxy Protocol"
+authors="NickUC"
+description='''
+Adds HAProxy protocol support for modded servers.
+'''

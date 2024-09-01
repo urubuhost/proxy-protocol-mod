@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "app/urubu/haproxy/mixin/ServerChannelInitializer": {
+      "startTcpServerListener": "Lnet/minecraft/server/network/ServerConnectionListener;m_9711_(Ljava/net/InetAddress;I)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "app/urubu/haproxy/mixin/ServerChannelInitializer": {
+        "startTcpServerListener": "Lnet/minecraft/server/network/ServerConnectionListener;m_9711_(Ljava/net/InetAddress;I)V"
+      }
+    }
+  }
+}

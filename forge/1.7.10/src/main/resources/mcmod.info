@@ -1,0 +1,16 @@
+[
+{
+  "modid": "haproxy_protocol",
+  "name": "HAProxy Protocol",
+  "description": "Adds HAProxy protocol support for modded servers.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["NickUC"],
+  "credits": "github.com/LasmGratel/Minecraft-1.7.10-Mixin-Template",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

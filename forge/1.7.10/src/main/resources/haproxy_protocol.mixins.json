@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "app.urubu.haproxy.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "haproxy_protocol.refmap.json",
+  "mixins": [
+    "ServerChannelInitializer"
+  ]
+}
