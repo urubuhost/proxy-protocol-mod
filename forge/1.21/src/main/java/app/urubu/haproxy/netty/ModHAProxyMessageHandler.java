@@ -30,14 +30,19 @@ public class ModHAProxyMessageHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        Channel channel = ctx.channel();
-        if (!(channel instanceof AbstractChannel)) {
-            // Expecting AbstractChannel
-            throw new IllegalArgumentException("Unsupported channel type! " + channel.getClass().getCanonicalName());
-        }
+        HAProxyMessage message = (HAProxyMessage) msg;
+        try {
+            Channel channel = ctx.channel();
+            if (!(channel instanceof AbstractChannel)) {
+                // Expecting AbstractChannel
+                throw new IllegalArgumentException("Unsupported channel type! " + channel.getClass().getCanonicalName());
+            }
 
-        setAddress((AbstractChannel) channel, (HAProxyMessage) msg);
-        ctx.pipeline().remove(this);
+            setAddress((AbstractChannel) channel, message);
+            ctx.pipeline().remove(this);
+        } finally {
+            message.release();
+        }
     }
 
     private void setAddress(AbstractChannel channel, HAProxyMessage message) {
