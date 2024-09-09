@@ -5,9 +5,6 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-
 version = mod_version
 group = mod_group_id
 
@@ -22,7 +19,7 @@ minecraft {
     mappings channel: mapping_channel, version: mapping_version
     
     // Tell FG to not automtically create the reobf tasks, as we now use Official mappings at runtime, If you don't use them at dev time then you'll have to fix your reobf yourself.
-    reobf = false
+    //reobf = false
 
     // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
     // It is REQUIRED to be set to true for this template to function.
