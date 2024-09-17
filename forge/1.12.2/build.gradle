@@ -9,7 +9,11 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
-        
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
@@ -30,18 +34,21 @@ minecraft {
     }
 }
 
-configurations {
-    embed
-}
-
 repositories {
     mavenCentral()
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 
-    embed('io.netty:netty-codec-haproxy:4.1.112.Final') {
+    implementation 'io.netty:netty-codec-haproxy:4.1.112.Final'
+
+    shade('io.netty:netty-codec-haproxy:4.1.112.Final') {
         exclude group: '*', module: '*'
     }
 
@@ -84,7 +91,21 @@ jar {
             "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker"
         ])
     }
-    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
+
+shadowJar {
+    configurations = [project.configurations.shade]
+    //archiveFileName = 'haproxy-protocol-forge-1.12.2.jar'
+
+    def pkg = project.group
+    def libPkg = pkg + '.lib.'
+    relocate 'io.netty.handler.codec.haproxy', libPkg + 'haproxy'
+}
+
+reobf {
+    shadowJar {}
+}
+
+assemble.dependsOn shadowJar
 
 jar.finalizedBy('reobfJar')
