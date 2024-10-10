@@ -1,5 +1,6 @@
 package app.urubu.haproxy.netty;
 
+import app.urubu.haproxy.mixin.ConnectionAccessor;
 import io.netty.channel.AbstractChannel;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -42,10 +43,15 @@ public class ModHAProxyMessageHandler extends ChannelInboundHandlerAdapter {
 
     private void setAddress(AbstractChannel channel, HAProxyMessage message) {
         try {
-            CHANNEL_REMOTE_ADDRESS.set(channel,
-                    new InetSocketAddress(message.sourceAddress(), message.sourcePort()));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(message.sourceAddress(), message.sourcePort());
+            // Set new IP on Netty channel
+            CHANNEL_REMOTE_ADDRESS.set(channel, inetSocketAddress);
+            // The new client IP also needs to be set in the packet handler
+            ConnectionAccessor connection = ((ConnectionAccessor) channel.pipeline().get("packet_handler"));
+            connection.setAddress(inetSocketAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Cannot set address for " + channel + ": " + channel.pipeline().names());
         }
     }
 }

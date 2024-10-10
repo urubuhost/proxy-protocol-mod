@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "haproxy_protocol.refmap.json",
   "mixins": [
+    "ConnectionAccessor",
     "ServerChannelInitializer"
   ]
 }

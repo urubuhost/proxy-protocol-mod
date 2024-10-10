@@ -3,6 +3,7 @@
 	"package": "app.urubu.haproxy.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
+		"ConnectionAccessor",
 		"ServerChannelInitializer"
 	],
 	"injectors": {
