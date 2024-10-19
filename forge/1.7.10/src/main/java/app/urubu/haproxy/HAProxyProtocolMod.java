@@ -1,9 +1,6 @@
 package app.urubu.haproxy;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import io.netty.channel.Channel;
 
 @Mod(modid = HAProxyProtocolMod.MODID, version = HAProxyProtocolMod.VERSION)
 public class HAProxyProtocolMod {
