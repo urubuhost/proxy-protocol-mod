@@ -1,13 +1,10 @@
 package app.urubu.haproxy.netty;
 
-import app.urubu.haproxy.util.CIDRMatcher;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 
 import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 
 public class ModChannelInitializer extends ChannelInitializer<Channel> {
 
@@ -33,15 +30,6 @@ public class ModChannelInitializer extends ChannelInitializer<Channel> {
         INIT_CHANNEL_INITIALIZER.invoke(originalChannelInitializer, channel);
 
         try {
-            InetSocketAddress inetSocketAddress = (InetSocketAddress) channel.remoteAddress();
-            InetAddress inetAddress = inetSocketAddress.getAddress();
-
-            if (CIDRMatcher.RFC1918.stream().anyMatch(cidrMatcher -> cidrMatcher.matches(inetAddress))) {
-                // Not allowed
-                channel.close();
-                return;
-            }
-
             channel.pipeline()
                     .addFirst(new ModHAProxyMessageHandler())
                     .addFirst(new HAProxyMessageDecoder());
