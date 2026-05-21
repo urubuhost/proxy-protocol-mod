@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "app.urubu.haproxy.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"ConnectionAccessor",
+		"ServerChannelInitializer"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
